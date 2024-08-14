@@ -33,7 +33,16 @@ export const signUpController = async (req, res) => {
 };
 
 const validPassword = (password) => {
-    const passwordRegex =
+    if (password.length < 10) return false;
+    const oneUpperCaseRegex = /.*[A-Z]{1,}.*/;
+    if (!oneUpperCaseRegex.test(password)) return false;
+    const oneDigitRegex = /.*\d{1,}.*/;
+    if (!oneDigitRegex.test(password)) return false;
+    const oneSymbolRegex = /.[\D^a-z^A-Z].*/;
+};
+
+const validUsername = (username) => {
+    const usernameRegex =
         /^(?=.*[A-Z])(?=.*[!@#$%^&*()])(?=.*[0-9])(?=.*[a-z]).{10,}$/;
     return passwordRegex.test(password);
 };

@@ -1,11 +1,6 @@
-import { Router } from "express";
-import { queryDatabase } from "../database/MySQLDatabase.js";
+import { Router } from 'express';
+import { signUpController } from './AuthenticationController.js';
 
 export const AuthenticationRouter = Router();
 
-AuthenticationRouter.get('/', async (req, res) => {
-    const result = await queryDatabase('SELECT * FROM users', []);
-
-    console.log(result);
-    res.end();
-})
+AuthenticationRouter.post('/signup', signUpController);

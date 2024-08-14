@@ -1,4 +1,6 @@
 import mysql from 'mysql2';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -8,15 +10,15 @@ const pool = mysql.createPool({
     port: process.env.DB_PORT,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
-  });
-  
-  export async function queryDatabase(query, params = []) {
+    queueLimit: 0,
+});
+
+export async function queryDatabase(query, params = []) {
     try {
-      const [rows, fields] = await pool.promise().query(query, params);
-      return rows;
+        const [rows, fields] = await pool.promise().query(query, params);
+        return rows;
     } catch (error) {
-      console.error('Database query error:', error);
-      throw error;
+        console.error('Database query error:', error);
+        throw error;
     }
-  }
+}

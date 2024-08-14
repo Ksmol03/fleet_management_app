@@ -1,4 +1,12 @@
-GET http://localhost:8080/api/authentication
+POST http://localhost:8080/api/authentication/signup
+Content-Type: application/json
+
+{
+    "username": "admins",
+    "email": "admin@example.com",
+    "password": "032oDder2@1",
+    "accept_terms": "false"
+}
 
 ##
 

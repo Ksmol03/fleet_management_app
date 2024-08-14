@@ -1,13 +1,13 @@
 import express from 'express';
-import { ApiRouter } from './api/routes/ApiRouter.js';
 import dotenv from 'dotenv';
-
-dotenv.config();
+import { ApiRouter } from './api/routes/ApiRouter.js';
 
 const app = express();
+dotenv.config();
 
-app.use('/api', ApiRouter)
+app.use(express.json());
+app.use('/api', ApiRouter);
 
 app.listen(8080, () => {
     console.log('App is running...');
-})
+});

@@ -67,11 +67,12 @@ export const signUpController = async (req, res) => {
         const query =
             'INSERT INTO users (username, email, first_hashed_password, accept_terms) VALUES (?, ?, ?, ?)';
         await queryDatabase(query, [username, lowerCaseEmail, hashed_password, accept_terms]);
-        return res.json({ message: 'Succesfully signed up' });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });
     }
+
+    res.json({ message: 'Succesfully signed up' });
 };
 
 const validPassword = (password) => {

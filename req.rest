@@ -2,10 +2,10 @@ POST http://localhost:8080/api/authentication/signup
 Content-Type: application/json
 
 {
-    "username": "admins",
-    "email": "admin@example.com",
-    "password": "032oDder2@1",
-    "accept_terms": "false"
+    "username": "admin1234",
+    "email": "admin123@example.pl",
+    "password": "Admin123!!!",
+    "accept_terms": true
 }
 
 ##

@@ -1,11 +1,11 @@
-import { queryDatabase } from '../database/MySQLDatabase.js';
+import { queryDatabase } from '../../database/MySQLDatabase.js';
 import bcrypt from 'bcrypt';
 
 export const signUpController = async (req, res) => {
     const { username, email, password, accept_terms } = req.body;
 
     //Check if all data are provided
-    if (!username || !email || !password || !accept_terms) {
+    if (!username || !email || !password || accept_terms == null) {
         return res.status(400).json({ message: 'Not all data provided' }).end();
     }
 
@@ -57,12 +57,16 @@ export const signUpController = async (req, res) => {
         });
     }
 
+    //Chech if terms are accepted
+    if (!accept_terms) return res.status(400).json({ message: 'Terms not accepted' });
+
     //Create user account
     try {
         const lowerCaseEmail = email.toLowerCase();
         const hashed_password = bcrypt.hashSync(password, 12);
-        const query = 'INSERT INTO users (username, email, first_hashed_password) VALUES (?, ?, ?)';
-        await queryDatabase(query, [username, lowerCaseEmail, hashed_password]);
+        const query =
+            'INSERT INTO users (username, email, first_hashed_password, accept_terms) VALUES (?, ?, ?, ?)';
+        await queryDatabase(query, [username, lowerCaseEmail, hashed_password, accept_terms]);
         return res.json({ message: 'Succesfully signed up' });
     } catch (err) {
         console.error(err);

@@ -34,11 +34,11 @@ export const activationLinkController = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 
-    //Create activation code
-    const activation_code = crypto.randomBytes(20).toString('hex');
+    //Create activation token
+    const activation_token = crypto.randomBytes(20).toString('hex');
     try {
-        const query = 'INSERT INTO activations (activation_code, username) VALUES (?, ?)';
-        await queryDatabase(query, [activation_code, res.locals.username]);
+        const query = 'INSERT INTO activations (activation_token, username) VALUES (?, ?)';
+        await queryDatabase(query, [activation_token, res.locals.username]);
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });
@@ -49,7 +49,7 @@ export const activationLinkController = async (req, res) => {
         from: '"NodeJS app" <nodejs@app.com>',
         to: email,
         subject: 'Nodemailer',
-        text: activation_code,
+        text: activation_token,
     };
 
     const info = await transporter.sendMail(message, (err, info) => {

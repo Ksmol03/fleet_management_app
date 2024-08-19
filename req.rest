@@ -46,3 +46,8 @@ Content-Type: application/json
     "username": "gorath711",
     "password": "P@ssw0rd!123"
 }
+
+###
+
+GET http://localhost:8080/api/auth/auth
+Content-Type: application/json

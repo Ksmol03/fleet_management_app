@@ -16,14 +16,14 @@ export const signInController = async (req, res) => {
 
     //Check if username is valid
     if (!validUsername(username)) {
-        return res.status(400).json({
+        return res.status(401).json({
             message: 'Invalid username or password',
         });
     }
 
     //Check password stength
     if (!validPassword(password)) {
-        return res.status(400).json({
+        return res.status(401).json({
             message: 'Invalid username or password',
         });
     }
@@ -33,7 +33,7 @@ export const signInController = async (req, res) => {
         const query = 'SELECT * FROM users WHERE username = ?';
         const [user] = await queryDatabase(query, [username]);
         if (!user)
-            return res.status(400).json({
+            return res.status(401).json({
                 message: 'Invalid username or password',
             });
     } catch (err) {
@@ -66,7 +66,7 @@ export const signInController = async (req, res) => {
             currentHashedPassword = first_hashed_password;
 
         if (!bcrypt.compareSync(password, currentHashedPassword))
-            return res.status(400).json({
+            return res.status(401).json({
                 message: 'Invalid username or password',
             });
     } catch (err) {

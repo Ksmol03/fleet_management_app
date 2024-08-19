@@ -66,12 +66,11 @@ export const signInController = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 
-    //Check if user is activated
+    //Check if account is activated
     try {
         const query = 'SELECT activated FROM users WHERE username = ?';
         const [{ activated }] = await queryDatabase(query, [username]);
-
-        console.log(activated);
+        if (!activated) return res.status(403).json({ message: 'Account not activated' });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });

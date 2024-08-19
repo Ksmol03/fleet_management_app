@@ -17,11 +17,11 @@ export const accountActivationController = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 
-    //Check if user is activated
+    //Check if account is activated
     try {
         const query = 'SELECT activated FROM users WHERE username = ?';
         const [{ activated }] = await queryDatabase(query, [userUsername]);
-        if (activated) return res.status(409).json({ message: 'User already activated' });
+        if (activated) return res.status(409).json({ message: 'Account already activated' });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });
@@ -37,11 +37,11 @@ export const accountActivationController = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 
-    //Acticate user
+    //Activate account
     try {
         const query = 'UPDATE users SET activated = 1 WHERE username = ?';
         await queryDatabase(query, [userUsername]);
-        res.json({ message: 'User activated succesfully' });
+        res.json({ message: 'Account activated succesfully' });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });

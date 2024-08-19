@@ -48,7 +48,7 @@ export const activationLinkController = async (req, res) => {
     const message = {
         from: '"NodeJS app" <nodejs@app.com>',
         to: email,
-        subject: 'Nodemailer',
+        subject: 'Activation Link',
         text: activation_token,
     };
 

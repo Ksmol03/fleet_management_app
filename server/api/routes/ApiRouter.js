@@ -3,4 +3,4 @@ import { AuthenticationRouter } from '../authentication/AuthenticationRouter.js'
 
 export const ApiRouter = Router();
 
-ApiRouter.use('/authentication', AuthenticationRouter);
+ApiRouter.use('/auth', AuthenticationRouter);

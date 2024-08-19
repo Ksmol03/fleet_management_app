@@ -2,8 +2,8 @@ POST http://localhost:8080/api/auth/sign-up
 Content-Type: application/json
 
 {
-    "username": "gorath71",
-    "email": "gorath@examdwplea2.com",
+    "username": "gorath711",
+    "email": "gorath@examdwplea21.com",
     "password": "P@ssw0rd!123",
     "accept_terms": true
 }
@@ -26,3 +26,23 @@ Content-Type: application/json
 
 PUT http://localhost:8080/api/auth/change-password
 Content-Type: application/json
+
+###
+
+POST http://localhost:8080/api/auth/sign-in
+Content-Type: application/json
+
+{
+    "username": "gorath71",
+    "password": "Administrator1!"
+}
+
+###
+
+POST http://localhost:8080/api/auth/sign-in
+Content-Type: application/json
+
+{
+    "username": "gorath711",
+    "password": "P@ssw0rd!123"
+}

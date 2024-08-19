@@ -1,5 +1,6 @@
 import { queryDatabase } from '../../database/MySQLDatabase.js';
 import bcrypt from 'bcrypt';
+import { validEmail, validPassword, validUsername } from '../utils/CredentialsValidatorUtil.js';
 
 export const signUpController = async (req, res) => {
     const { username, email, password, accept_terms } = req.body;
@@ -73,29 +74,4 @@ export const signUpController = async (req, res) => {
     }
 
     res.json({ message: 'Succesfully signed up' });
-};
-
-const validPassword = (password) => {
-    if (password.length < 10) return false;
-    const oneUpperCaseRegex = /[A-Z]/;
-    if (!oneUpperCaseRegex.test(password)) return false;
-    const oneDigitRegex = /\d/;
-    if (!oneDigitRegex.test(password)) return false;
-    const oneSymbolRegex = /[^\da-zA-Z]/;
-    if (!oneSymbolRegex.test(password)) return false;
-    return true;
-};
-
-const validUsername = (username) => {
-    if (username.length < 5) return false;
-    const usernameRegex = /^[a-zA-Z]+[\da-zA-Z]*$/;
-    if (!usernameRegex.test(username)) return false;
-    return true;
-};
-
-const validEmail = (email) => {
-    const emailRegex =
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!emailRegex.test(email)) return false;
-    return true;
 };

@@ -11,3 +11,12 @@ CREATE TABLE users(
 );
 
 INSERT INTO users(username, email, first_hashed_password, activated) VALUES('admin', 'admin@example.com', '$2a$12$J3iwEKpRkUJ1sEUc37MTXeP28l1UPt09l0jIflUxAzZ/XU3Vjz4Iu', 1);
+
+CREATE TABLE sessions (
+	session_key VARCHAR(64) PRIMARY KEY,
+    username VARCHAR(30) NOT NULL,
+    ip VARCHAR(45) NOT NULL,
+    last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (username) REFERENCES users (username)
+)

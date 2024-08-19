@@ -1,6 +1,10 @@
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import { queryDatabase } from '../../database/MySQLDatabase.js';
-import { validPassword, validUsername } from '../utils/CredentialsValidatorUtil.js';
+import {
+    validPassword,
+    validUsername,
+} from '../utils/CredentialsValidatorUtil.js';
 
 export const signInController = async (req, res) => {
     const { username, password } = req.body;
@@ -52,10 +56,14 @@ export const signInController = async (req, res) => {
         ] = await queryDatabase(query, [username]);
 
         let currentHashedPassword = fifth_hashed_password;
-        if (!fifth_hashed_password) currentHashedPassword = fourth_hashed_password;
-        if (!fourth_hashed_password) currentHashedPassword = third_hashed_password;
-        if (!third_hashed_password) currentHashedPassword = second_hashed_password;
-        if (!second_hashed_password) currentHashedPassword = first_hashed_password;
+        if (!fifth_hashed_password)
+            currentHashedPassword = fourth_hashed_password;
+        if (!fourth_hashed_password)
+            currentHashedPassword = third_hashed_password;
+        if (!third_hashed_password)
+            currentHashedPassword = second_hashed_password;
+        if (!second_hashed_password)
+            currentHashedPassword = first_hashed_password;
 
         if (!bcrypt.compareSync(password, currentHashedPassword))
             return res.status(400).json({
@@ -70,7 +78,20 @@ export const signInController = async (req, res) => {
     try {
         const query = 'SELECT activated FROM users WHERE username = ?';
         const [{ activated }] = await queryDatabase(query, [username]);
-        if (!activated) return res.status(403).json({ message: 'Account not activated' });
+        if (!activated)
+            return res.status(403).json({ message: 'Account not activated' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    //Send session key
+    const sessionKey = crypto.randomBytes(32).toString('hex');
+    try {
+        const query =
+            'INSERT INTO sessions (session_key, username, ip) VALUES (?, ?, ?)';
+        await queryDatabase(query, [sessionKey, username, req.ip]);
+        res.cookie('sessionKey', sessionKey, { httpOnly: true });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });

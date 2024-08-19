@@ -2,8 +2,8 @@ POST http://localhost:8080/api/auth/sign-up
 Content-Type: application/json
 
 {
-    "username": "gorath711",
-    "email": "gorath@examdwplea21.com",
+    "username": "gorath7111",
+    "email": "gorath@examdwplea212.com",
     "password": "P@ssw0rd!123",
     "accept_terms": true
 }
@@ -14,12 +14,12 @@ PUT http://localhost:8080/api/auth/activation-link
 Content-Type: application/json
 
  {
-    "email": "gorath@examdwplea2.com"
+    "email": "gorath@examdwplea21.com"
  }
 
 ###
 
-PUT http://localhost:8080/api/auth/activate/a6dd2fd2be95923863f733fede41c3032127ab7a
+PUT http://localhost:8080/api/auth/activate/425d8dc1bb913f3e3e06ef19bc1840226e48fc9d
 Content-Type: application/json  
 
 ###

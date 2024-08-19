@@ -1,6 +1,10 @@
 import { queryDatabase } from '../../database/MySQLDatabase.js';
 import bcrypt from 'bcrypt';
-import { validEmail, validPassword, validUsername } from '../utils/CredentialsValidatorUtil.js';
+import {
+    validEmail,
+    validPassword,
+    validUsername,
+} from '../utils/CredentialsValidatorUtil.js';
 
 export const signUpController = async (req, res) => {
     const { username, email, password, accept_terms } = req.body;
@@ -59,15 +63,16 @@ export const signUpController = async (req, res) => {
     }
 
     //Chech if terms are accepted
-    if (!accept_terms) return res.status(400).json({ message: 'Terms not accepted' });
+    if (!accept_terms)
+        return res.status(400).json({ message: 'Terms not accepted' });
 
     //Create user account
     try {
         const lowerCaseEmail = email.toLowerCase();
         const hashed_password = bcrypt.hashSync(password, 12);
         const query =
-            'INSERT INTO users (username, email, first_hashed_password, accept_terms) VALUES (?, ?, ?, ?)';
-        await queryDatabase(query, [username, lowerCaseEmail, hashed_password, accept_terms]);
+            'INSERT INTO users (username, email, first_hashed_password) VALUES (?, ?, ?)';
+        await queryDatabase(query, [username, lowerCaseEmail, hashed_password]);
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });

@@ -37,13 +37,15 @@ export const changePasswordController = async (req, res) => {
         ] = await queryDatabase(query, [res.locals.username]);
 
         //Get current password
-        let currentHashedPassword = fifth_hashed_password;
-        if (!fifth_hashed_password) currentHashedPassword = fourth_hashed_password;
-        if (!fourth_hashed_password) currentHashedPassword = third_hashed_password;
-        if (!third_hashed_password) currentHashedPassword = second_hashed_password;
-        if (!second_hashed_password) currentHashedPassword = first_hashed_password;
+        const currentHashedPassword = () => {
+            if (!second_hashed_password) return first_hashed_password;
+            if (!third_hashed_password) return second_hashed_password;
+            if (!fourth_hashed_password) return third_hashed_password;
+            if (!fifth_hashed_password) return fourth_hashed_password;
+            return fifth_hashed_password;
+        };
 
-        if (!bcrypt.compareSync(oldPassword, currentHashedPassword))
+        if (!bcrypt.compareSync(oldPassword, currentHashedPassword()))
             return res.status(401).json({
                 message: 'Invalid password',
             });
@@ -73,7 +75,7 @@ export const changePasswordController = async (req, res) => {
         //Change password in db
         const newHashedPassword = bcrypt.hashSync(newPassword, 12);
         let insertPasswordQuery;
-        if (fifth_hashed_password == currentHashedPassword) {
+        if (fifth_hashed_password == currentHashedPassword()) {
             insertPasswordQuery =
                 'UPDATE users SET first_hashed_password = ?, second_hashed_password = ?, third_hashed_password = ?, fourth_hashed_password = ?, fifth_hashed_password = ? WHERE username = ?';
             await queryDatabase(insertPasswordQuery, [
@@ -87,13 +89,13 @@ export const changePasswordController = async (req, res) => {
 
             return res.json({ message: 'Password changed' });
         }
-        if (first_hashed_password == currentHashedPassword)
+        if (first_hashed_password == currentHashedPassword())
             insertPasswordQuery = 'UPDATE users SET second_hashed_password = ? WHERE username = ?';
-        if (second_hashed_password == currentHashedPassword)
+        if (second_hashed_password == currentHashedPassword())
             insertPasswordQuery = 'UPDATE users SET third_hashed_password = ? WHERE username = ?';
-        if (third_hashed_password == currentHashedPassword)
+        if (third_hashed_password == currentHashedPassword())
             insertPasswordQuery = 'UPDATE users SET fourth_hashed_password = ? WHERE username = ?';
-        if (fourth_hashed_password == currentHashedPassword)
+        if (fourth_hashed_password == currentHashedPassword())
             insertPasswordQuery = 'UPDATE users SET fifth_hashed_password = ? WHERE username = ?';
         await queryDatabase(insertPasswordQuery, [newHashedPassword, res.locals.username]);
 

@@ -13,4 +13,5 @@ AuthenticationRouter.put('/activation-link', activationLinkController);
 AuthenticationRouter.put('/activate/:token', accountActivationController);
 AuthenticationRouter.post('/sign-in', signInController);
 
-AuthenticationRouter.put('/change-password', authenticateUserMiddleware, changePasswordController);
+AuthenticationRouter.use(authenticateUserMiddleware);
+AuthenticationRouter.put('/change-password', changePasswordController);

@@ -2,9 +2,9 @@ POST http://localhost:8080/api/auth/sign-up
 Content-Type: application/json
 
 {
-    "username": "gorath7111",
-    "email": "gorath@examdwplea212.com",
-    "password": "P@ssw0rd!123",
+    "username": "admin123",
+    "email": "admin@example.com",
+    "password": "Administrator!1",
     "accept_terms": true
 }
 
@@ -14,38 +14,33 @@ PUT http://localhost:8080/api/auth/activation-link
 Content-Type: application/json
 
  {
-    "email": "gorath@examdwplea21.com"
+    "email": "admin@example.com"
  }
 
 ###
 
-PUT http://localhost:8080/api/auth/activate/7e06638707d23a05eee187b0ab5813fa1ddb4760
+PUT http://localhost:8080/api/auth/activate/718652bace643f06c6f3272068828217174e1cd7
 Content-Type: application/json  
 
+###
+
+POST http://localhost:8080/api/auth/sign-in
+Content-Type: application/json
+
+{
+    "username": "admin123",
+    "password": "Administrator!1"
+}
 ###
 
 PUT http://localhost:8080/api/auth/change-password
 Content-Type: application/json
 
-###
-
-POST http://localhost:8080/api/auth/sign-in
-Content-Type: application/json
-
 {
-    "username": "gorath71",
-    "password": "Administrator1!"
+    "oldPassword": "Administrator!1",
+    "newPassword": "Administrator!2"
 }
 
 ###
 
-POST http://localhost:8080/api/auth/sign-in
-Content-Type: application/json
-
-{
-    "username": "gorath711",
-    "password": "P@ssw0rd!123"
-}
-
-###
 

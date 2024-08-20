@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/api/auth/activate/425d8dc1bb913f3e3e06ef19bc1840226e48fc9d
+PUT http://localhost:8080/api/auth/activate/7e06638707d23a05eee187b0ab5813fa1ddb4760
 Content-Type: application/json  
 
 ###
@@ -49,5 +49,3 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/api/auth/auth
-Content-Type: application/json

@@ -1,5 +1,6 @@
 import { queryDatabase } from '../../database/MySQLDatabase.js';
 import { validPassword } from '../utils/CredentialsValidatorUtil.js';
+import bcrypt from 'bcrypt';
 
 export const changePasswordController = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
@@ -33,20 +34,16 @@ export const changePasswordController = async (req, res) => {
                 fourth_hashed_password,
                 fifth_hashed_password,
             },
-        ] = await queryDatabase(query, [username]);
+        ] = await queryDatabase(query, [res.locals.username]);
 
         //Get current password
         let currentHashedPassword = fifth_hashed_password;
-        if (!fifth_hashed_password)
-            currentHashedPassword = fourth_hashed_password;
-        if (!fourth_hashed_password)
-            currentHashedPassword = third_hashed_password;
-        if (!third_hashed_password)
-            currentHashedPassword = second_hashed_password;
-        if (!second_hashed_password)
-            currentHashedPassword = first_hashed_password;
+        if (!fifth_hashed_password) currentHashedPassword = fourth_hashed_password;
+        if (!fourth_hashed_password) currentHashedPassword = third_hashed_password;
+        if (!third_hashed_password) currentHashedPassword = second_hashed_password;
+        if (!second_hashed_password) currentHashedPassword = first_hashed_password;
 
-        if (!bcrypt.compareSync(password, currentHashedPassword))
+        if (!bcrypt.compareSync(oldPassword, currentHashedPassword))
             return res.status(401).json({
                 message: 'Invalid password',
             });
@@ -54,41 +51,53 @@ export const changePasswordController = async (req, res) => {
         //Check passwords history
         if (bcrypt.compareSync(newPassword, first_hashed_password))
             return res.status(409).json({
-                message:
-                    'New password must be different than 5 previous passwords',
+                message: 'New password must be different than 5 previous passwords',
             });
-        if (
-            second_hashed_password &&
-            bcrypt.compareSync(newPassword, second_hashed_password)
-        )
+        if (second_hashed_password && bcrypt.compareSync(newPassword, second_hashed_password))
             return res.status(409).json({
-                message:
-                    'New password must be different than 5 previous passwords',
+                message: 'New password must be different than 5 previous passwords',
             });
-        if (
-            third_hashed_password &&
-            bcrypt.compareSync(newPassword, third_hashed_password)
-        )
+        if (third_hashed_password && bcrypt.compareSync(newPassword, third_hashed_password))
             return res.status(409).json({
-                message:
-                    'New password must be different than 5 previous passwords',
+                message: 'New password must be different than 5 previous passwords',
             });
-        if (
-            fourth_hashed_password &&
-            bcrypt.compareSync(newPassword, fourth_hashed_password)
-        )
+        if (fourth_hashed_password && bcrypt.compareSync(newPassword, fourth_hashed_password))
             return res.status(409).json({
-                message:
-                    'New password must be different than 5 previous passwords',
+                message: 'New password must be different than 5 previous passwords',
             });
-        if (
-            fifth_hashed_password &&
-            bcrypt.compareSync(newPassword, fifth_hashed_password)
-        )
+        if (fifth_hashed_password && bcrypt.compareSync(newPassword, fifth_hashed_password))
             return res.status(409).json({
-                message:
-                    'New password must be different than 5 previous passwords',
+                message: 'New password must be different than 5 previous passwords',
             });
+
+        //Change password in db
+        const newHashedPassword = bcrypt.hashSync(newPassword, 12);
+        let insertPasswordQuery;
+        if (fifth_hashed_password == currentHashedPassword) {
+            insertPasswordQuery =
+                'UPDATE users SET first_hashed_password = ?, second_hashed_password = ?, third_hashed_password = ?, fourth_hashed_password = ?, fifth_hashed_password = ? WHERE username = ?';
+            await queryDatabase(insertPasswordQuery, [
+                second_hashed_password,
+                third_hashed_password,
+                fourth_hashed_password,
+                fifth_hashed_password,
+                newHashedPassword,
+                res.locals.username,
+            ]);
+
+            return res.json({ message: 'Password changed' });
+        }
+        if (first_hashed_password == currentHashedPassword)
+            insertPasswordQuery = 'UPDATE users SET second_hashed_password = ? WHERE username = ?';
+        if (second_hashed_password == currentHashedPassword)
+            insertPasswordQuery = 'UPDATE users SET third_hashed_password = ? WHERE username = ?';
+        if (third_hashed_password == currentHashedPassword)
+            insertPasswordQuery = 'UPDATE users SET fourth_hashed_password = ? WHERE username = ?';
+        if (fourth_hashed_password == currentHashedPassword)
+            insertPasswordQuery = 'UPDATE users SET fifth_hashed_password = ? WHERE username = ?';
+        await queryDatabase(insertPasswordQuery, [newHashedPassword, res.locals.username]);
+
+        return res.json({ message: 'Password changed' });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });

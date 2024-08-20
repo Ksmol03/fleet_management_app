@@ -1,5 +1,5 @@
+import { validPassword } from '../../authentication/utils/CredentialsValidatorUtil.js';
 import { queryDatabase } from '../../database/MySQLDatabase.js';
-import { validPassword } from '../utils/CredentialsValidatorUtil.js';
 import bcrypt from 'bcrypt';
 
 export const changePasswordController = async (req, res) => {

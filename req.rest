@@ -33,7 +33,7 @@ Content-Type: application/json
 }
 ###
 
-PUT http://localhost:8080/api/auth/change-password
+PUT http://localhost:8080/api/profile/change-password
 Content-Type: application/json
 
 {

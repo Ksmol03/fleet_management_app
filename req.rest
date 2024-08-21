@@ -43,4 +43,9 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:8080/api/organization
+Content-Type: application/json
 
+{
+    "name": "IKEA"
+}

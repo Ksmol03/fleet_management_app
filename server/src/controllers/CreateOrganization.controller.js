@@ -9,9 +9,21 @@ export const CreateOrganizationController = async (req, res) => {
     }
 
     //Create organization
+    let organizationId;
     try {
-        const query = 'INSERT INTO organizations (organization_name, owner) VALUES (?, ?)';
-        await queryDatabase(query, [name, res.locals.user_username]);
+        const query = 'INSERT INTO organizations (organization_name) VALUES (?)';
+        const result = await queryDatabase(query, [name]);
+        organizationId = result.insertId;
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    //Get admin role
+    try {
+        const query =
+            'INSERT INTO role_in_organization (username, organization_id, role_id) VALUES (?, ?, 3)';
+        await queryDatabase(query, [res.locals.user_username, organizationId]);
         return res.json({ message: 'Organization created succesfully' });
     } catch (err) {
         console.error(err);

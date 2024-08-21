@@ -47,7 +47,7 @@ POST http://localhost:8080/api/organization
 Content-Type: application/json
 
 {
-    "name": "IKEA"
+    "name": "KWP"
 }
 
 ###
@@ -65,7 +65,7 @@ PUT http://localhost:8080/api/organization
 Content-Type: application/json
 
 {
-    "id": "28",
+    "id": "38",
     "name": "IKEA2"
 }
 

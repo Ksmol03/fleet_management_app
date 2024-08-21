@@ -8,15 +8,24 @@ export const DeleteOrganizationController = async (req, res) => {
         return res.status(400).json({ message: 'Not all data provided' }).end();
     }
 
-    //Check if org with this id exists and if user is the owner
+    //Check if organization with this id exists
     try {
         const query = 'SELECT * FROM organizations WHERE organization_id = ?';
         const [result] = await queryDatabase(query, [id]);
 
         if (!result) return res.status(401).json({ message: 'Unauthorized' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 
-        if (result.owner != res.locals.user_username)
-            return res.status(401).json({ message: 'Unauthorized' });
+    //Check if user has permissions
+    try {
+        const query =
+            'SELECT role_id FROM role_in_organization WHERE username = ? AND organization_id = ?';
+        const [result] = await queryDatabase(query, [res.locals.user_username, id]);
+
+        if (result.role_id != 3) return res.status(401).json({ message: 'Unauthorized' });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });

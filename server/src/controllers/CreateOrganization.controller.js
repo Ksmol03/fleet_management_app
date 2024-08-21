@@ -11,7 +11,7 @@ export const CreateOrganizationController = async (req, res) => {
     //Create organization
     try {
         const query = 'INSERT INTO organizations (organization_name, owner) VALUES (?, ?)';
-        await queryDatabase(query, [name, res.locals.username]);
+        await queryDatabase(query, [name, res.locals.user_username]);
         return res.json({ message: 'Organization created succesfully' });
     } catch (err) {
         console.error(err);

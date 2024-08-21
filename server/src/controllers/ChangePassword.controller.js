@@ -34,7 +34,7 @@ export const changePasswordController = async (req, res) => {
                 fourth_hashed_password,
                 fifth_hashed_password,
             },
-        ] = await queryDatabase(query, [res.locals.username]);
+        ] = await queryDatabase(query, [res.locals.user_username]);
 
         //Get current password
         const currentHashedPassword = () => {
@@ -84,7 +84,7 @@ export const changePasswordController = async (req, res) => {
                 fourth_hashed_password,
                 fifth_hashed_password,
                 newHashedPassword,
-                res.locals.username,
+                res.locals.user_username,
             ]);
 
             return res.json({ message: 'Password changed' });
@@ -97,7 +97,7 @@ export const changePasswordController = async (req, res) => {
             insertPasswordQuery = 'UPDATE users SET fourth_hashed_password = ? WHERE username = ?';
         if (fourth_hashed_password == currentHashedPassword())
             insertPasswordQuery = 'UPDATE users SET fifth_hashed_password = ? WHERE username = ?';
-        await queryDatabase(insertPasswordQuery, [newHashedPassword, res.locals.username]);
+        await queryDatabase(insertPasswordQuery, [newHashedPassword, res.locals.user_username]);
 
         return res.json({ message: 'Password changed' });
     } catch (err) {

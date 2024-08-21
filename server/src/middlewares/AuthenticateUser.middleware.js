@@ -15,7 +15,7 @@ export const authenticateUserMiddleware = async (req, res, next) => {
         const oneWeekAgo = Date.now() - 1000 * 60 * 60 * 24 * 7;
         if (user.last_used < oneWeekAgo) return res.status(401).json({ message: 'Unauthorized' });
 
-        res.locals.username = user.username;
+        res.locals.user_username = user.username;
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal server error' });

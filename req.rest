@@ -2,8 +2,8 @@ POST http://localhost:8080/api/auth/sign-up
 Content-Type: application/json
 
 {
-    "username": "admin123",
-    "email": "admin@example.com",
+    "username": "admin1234",
+    "email": "admin2@example.com",
     "password": "Administrator!1",
     "accept_terms": true
 }
@@ -29,7 +29,7 @@ Content-Type: application/json
 
 {
     "username": "admin123",
-    "password": "Administrator!1"
+    "password": "Administrator!2"
 }
 ###
 
@@ -49,3 +49,24 @@ Content-Type: application/json
 {
     "name": "IKEA"
 }
+
+###
+
+DELETE http://localhost:8080/api/organization
+Content-Type: application/json
+
+{
+    "id": "26"
+}
+
+###
+
+PUT http://localhost:8080/api/organization
+Content-Type: application/json
+
+{
+    "id": "28",
+    "name": "IKEA2"
+}
+
+###

@@ -8,6 +8,7 @@ export const CreateOrganizationController = async (req, res) => {
         return res.status(400).json({ message: 'Not all data provided' }).end();
     }
 
+    //Create organization
     try {
         const query = 'INSERT INTO organizations (organization_name, owner) VALUES (?, ?)';
         await queryDatabase(query, [name, res.locals.username]);
